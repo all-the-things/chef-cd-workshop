@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11.1">
-      <projectUrl><%= node["jenkins"]["git"]["cookbook"]["repo"] %>/</projectUrl>
+      <projectUrl><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %>/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -28,7 +28,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
-        <url><%= node["jenkins"]["git"]["cookbook"]["repo"] %>.git</url>
+        <url><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %>.git</url>
         <credentialsId>c1803003-e1b4-4957-86a1-327a0e9a6369</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -39,7 +39,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url><%= node["jenkins"]["git"]["cookbook"]["repo"] %></url>
+      <url><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %></url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>

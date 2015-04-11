@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11.1">
-      <projectUrl><%= node["jenkins"]["git"]["chef"]["repo"] %>/</projectUrl>
+      <projectUrl><%= node["jenkins"]["git"]["repo"]["chef-repo"] %>/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
@@ -26,7 +26,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url><%= node["jenkins"]["git"]["chef"]["repo"] %>.git</url>
+        <url><%= node["jenkins"]["git"]["repo"]["chef-repo"] %>.git</url>
         <credentialsId>c1803003-e1b4-4957-86a1-327a0e9a6369</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -37,7 +37,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url><%= node["jenkins"]["git"]["chef"]["repo"] %></url>
+      <url><%= node["jenkins"]["git"]["repo"]["chef-repo"] %></url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions/>
