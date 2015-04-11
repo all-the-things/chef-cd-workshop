@@ -37,7 +37,7 @@ default['jenkins']['admin']['public_key'] = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAA
 
 default['jenkins']['jobs'] = %w(sample-cookbook-verify sample-cookbook-accept sample-cookbook-ship)
 default['jenkins']['credentials']['username'] = 'alexmanly'
-default['jenkins']['credentials']['password'] = 'TE8B3+B7p5Gur4jpESPKYR6v7ToJCGTqgkbC9os+ibigp9SPxsJgtfpIWeiQwz5HxbrUGI6p6Vs/qE1g2ddwLg=='
+default['jenkins']['credentials']['password'] = 'f196f8ec882f54d77867feb7f26c274835ea4f01'
 default['jenkins']['git']['cookbook']['repo'] = 'https://github.com/alexmanly/sample-cookbook'
 default['jenkins']['git']['chef']['repo'] = 'https://github.com/alexmanly/chef-repo'
 default['jenkins']['chef']['identity'] = 'apm-chefconf2015'
@@ -81,7 +81,3 @@ cache_type               'BasicFile'
 cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
 cookbook_path            ["#{current_dir}/../cookbooks"]
 )
-
-default['java']['jdk_version'] = '7'
-default['java']['openjdk_packages'] = ['openjdk-7-jre']
-default['java']['install_flavor'] = 'openjdk'

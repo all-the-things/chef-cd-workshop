@@ -34,3 +34,4 @@ admin user
 
 # Platforms
 - CentOS 6.6+
+- Ubuntu 12+
