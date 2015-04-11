@@ -36,48 +36,8 @@ O9AJlOMmkr+/ilubx0ros+4a3Ymto/rrnch7ZgYqJq8aW9DpiPjZfkZc
 default['jenkins']['admin']['public_key'] = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDv277N4LdJjQEN/kwbH5r1e3kkpLBUjqAqlj2J+1ctO57hXuNPDP2eeB854UngZUc4QTThwhZdR2PdhtcKMc3XiTA5wcoN3l7SibJ+sk/MMFVupzuz3hBUidLn4KupnGHL0NYZmLpU6D163OCQUQNfaTJSKNE2GHfHQD2kLhCQaaMWupPzGU+oRT9KJHk9yY1HRBP0S893Y9CeG0pJS1B8U4E4rymJr96/IwBEOHQmYPFmcrRGPtRGwNMhRbZUgVNKFJAbyLahvbsppRtwNbXBntBFnGZoxQ2IDHI/Oq6+BIaVVQalqyR0RrGRSJWyWXrTS9EAAtXXqpwBPgcC/kPB'
 
 default['jenkins']['jobs'] = %w(sample-cookbook-verify sample-cookbook-accept sample-cookbook-ship)
-default['jenkins']['credentials']['username'] = 'alexmanly'
-default['jenkins']['credentials']['password'] = 'f196f8ec882f54d77867feb7f26c274835ea4f01'
-default['jenkins']['git']['cookbook']['repo'] = 'https://github.com/alexmanly/sample-cookbook'
-default['jenkins']['git']['chef']['repo'] = 'https://github.com/alexmanly/chef-repo'
-default['jenkins']['chef']['identity'] = 'apm-chefconf2015'
-default['jenkins']['chef']['user_pem'] = %q(
------BEGIN RSA PRIVATE KEY-----
-MIIEpAIBAAKCAQEA5CUBUIWGvtXrBWDRE1kST/gKax83n8hZwDaAzdgC+O9/Djls
-wEKDWrsiMYe/qPwKrBP40ahy7t5zTIMEaPh79O7PeE2IPeNGlO3FjvDDfl/EKHGA
-tI1tCSQtBk8TwX4aA4qhhWApWvDJeW0x0DLAiqAqBhxzQns3i+gLYNgnAFk4K8f7
-MHL1L9b5IXTmj3oMF8RRS+E2sUOVHtyNs4OY/tNE/rtNKM3jTt1o80RQf2j+gfGs
-Zn/YQrDcl9IRMyk7bTz0oEeo0QKKAS9Bwh8YlLAPEodfF0QmtvPErsfH+tRVi1dZ
-ZzTLCjCDG2VCUvUBifVGUL6naJ+cr9qZP+dvPQIDAQABAoIBAQCzUHqGBUzw9UWx
-hnUN1fZUsEnQBEs95MTWFICMSXmcmvCsB2p4ek6vo2GuuFllwiPJODFa6CDdqi3J
-NzjiIFudGY4rqhSpP9cb+v5J6OZej3qnpv5X6siGZM6WpNSMQkbD/dQR9pDKj3Jr
-Y+3BDALVcilVgEr/N8Viy1EWHw4YcIuVjxAyFlurG9gKeHBxAqtvi46hf9R8R7HB
-YTCuXmZIfMrZjACuOhJPIPz8mIwn570ysbbAxqnMVz0mz6Mdddyvdsc+uQLs+7gc
-QQuJUs4XNz0W6iOeYRbszcL5uIDJWEzlS5XJHPD0Geiq6xM14PiNknjr4YbXSjXt
-lRBUK7XpAoGBAPJIvqwSPR548sAkmFxWXMmDDCJpIK61be3k2L6v/0Iu4cm2ZkrR
-kPk+UCdc+I/knDTT6Zzfvtk+91C9sm6r7QtlSm+TE29lTCKqbtFP8CfaISqMqLXl
-oBz6+ArXAtWNuBTjnFwSid/EywteD+JwkAxkmb7bmg3xBc1dyGE2zqu7AoGBAPEP
-WEg5V9+2bT9Ju9BDBM5QVqmoOWErDsmA814t2u56w35K6YTR0m0nqlRgGzjxnWYz
-MNEP6AlyRTF9KZhN/y0hyJmZg2B24bS9iJu7axG4CWtV/lYiXBjacgfffDb96IEy
-SgIbupBgTyEPbX9yzx9lu44lNGj/IABTLfOQXhVnAoGAOSDX/MDMMow4SQAYAOXI
-OSeyS8bYEvnqssZcKRJcsOFXEfX1Rr0FXw/HXJC6d0tjXb19/yRu3tDPBfXExf26
-Bg7bL1XRplmPSzk+qhIcQXlYiqzh9wnu6AZxSDUMkQg6mIpWywsAAYhojASg4DbE
-cHekHPGw8IqdYKA1aF7A+pMCgYEAoLHCACN52MAbg5z7fpGumnojy2VBGu1BJkK3
-+YhH8cIUoBQAJ3JX/Dv859JJU2R9sKtfV35rCCEMzzjIiac0/DkRKJOVaLDXNU1D
-y8zcSyuL2+mvamvtSQQWD/mDLIWGgNmtTEp/y87n8Pn/3H4EZMHEjbVvgq7P/md0
-snECxvECgYAJ0uvYY3GSpLsl4q7c4OtkuZMdaWFt23N3NJy7K46LqL9NGqFqjsIA
-5N0lR4pIl1Y07fTPE2foxW/c9hSNPmyUfWvRne4tPp8WbUjrVT8DWNWn2gjIGiIm
-qLJ+dl9Wr7EpbzjMOEsz+54ZUR5T7c2jEThfpUJ5YfZYoA1ePDM7Lw==
------END RSA PRIVATE KEY-----
-)
-default['jenkins']['chef']['user_pem'] = %q(
-current_dir = File.dirname(__FILE__)
-log_level                :info
-log_location             STDOUT
-node_name                "alexmanly"
-client_key               "#{current_dir}/user.pem"
-chef_server_url          "https://api.opscode.com/organizations/apm-chefconf2015"
-cache_type               'BasicFile'
-cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
-cookbook_path            ["#{current_dir}/../cookbooks"]
-)
+default['jenkins']['git']['username'] = 'ENTER_GIT_USERNAME'
+default['jenkins']['git']['oauth_token'] = 'ENTER_GIT_OAUTH_TOKEN'
+default['jenkins']['git']['repo']['sample-cookbook'] = 'https://github.com/' + node['jenkins']['git']['username'] + '/sample-cookbook'
+default['jenkins']['git']['repo']['chef-repo'] = 'https://github.com/' + node['jenkins']['git']['username'] + '/chef-repo'
+default['jenkins']['chef']['identity'] = 'chefconf2015-CDWorkshop'

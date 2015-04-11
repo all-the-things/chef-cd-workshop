@@ -129,10 +129,10 @@ ruby_block 'set the security_enabled flag' do
   action :nothing
 end
 
-jenkins_password_credentials node['jenkins']['credentials']['username'] do   
+jenkins_password_credentials node['jenkins']['git']['username'] do   
   id 'c1803003-e1b4-4957-86a1-327a0e9a6369'   
   description 'GitHub'   
-  password node['jenkins']['credentials']['password'] 
+  password node['jenkins']['git']['oauth_token'] 
 end
 
 node['jenkins']['jobs'].each do |job|
