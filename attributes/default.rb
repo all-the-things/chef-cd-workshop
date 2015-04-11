@@ -35,8 +35,10 @@ O9AJlOMmkr+/ilubx0ros+4a3Ymto/rrnch7ZgYqJq8aW9DpiPjZfkZc
 
 default['jenkins']['admin']['public_key'] = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDv277N4LdJjQEN/kwbH5r1e3kkpLBUjqAqlj2J+1ctO57hXuNPDP2eeB854UngZUc4QTThwhZdR2PdhtcKMc3XiTA5wcoN3l7SibJ+sk/MMFVupzuz3hBUidLn4KupnGHL0NYZmLpU6D163OCQUQNfaTJSKNE2GHfHQD2kLhCQaaMWupPzGU+oRT9KJHk9yY1HRBP0S893Y9CeG0pJS1B8U4E4rymJr96/IwBEOHQmYPFmcrRGPtRGwNMhRbZUgVNKFJAbyLahvbsppRtwNbXBntBFnGZoxQ2IDHI/Oq6+BIaVVQalqyR0RrGRSJWyWXrTS9EAAtXXqpwBPgcC/kPB'
 
+default['jenkins']['jobs'] = %w(sample-cookbook-verify sample-cookbook-accept sample-cookbook-ship)
+default['jenkins']['git']['username'] = 'alexmanly'
+default['jenkins']['git']['password'] = 'TE8B3+B7p5Gur4jpESPKYR6v7ToJCGTqgkbC9os+ibigp9SPxsJgtfpIWeiQwz5HxbrUGI6p6Vs/qE1g2ddwLg=='
 
-
-
-
-
+default['java']['jdk_version'] = '7'
+default['java']['openjdk_packages'] = ['openjdk-7-jre']
+default['java']['install_flavor'] = 'openjdk'

@@ -7,12 +7,16 @@
 
 
 # add the EPEL repo so we can install Docker (docker-io)
-yum_repository 'epel' do
-  description 'Extra Packages for Enterprise Linux'
-  mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
-  gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
-  action :create
+case node["platform"]
+when "centos"
+  yum_repository 'epel' do
+    description 'Extra Packages for Enterprise Linux'
+    mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
+    gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+    action :create
+  end 
 end
+
 
 package 'git' do
   action :install
@@ -29,17 +33,33 @@ gem_package 'kitchen-docker' do
   action :install
 end
 
-# Install docker
-package 'docker-io' do
-  action :install
+case node["platform"]
+when "centos"
+  package 'docker-io' do
+    action :install
+  end
+when 'ubuntu'
+  include_recipe 'docker::package'
 end
 
 service 'docker' do
   action [:enable, :start]
 end
 
+
+# Install java
+case node["platform"]
+when "centos"
+  include_recipe 'jenkins::java'
+when 'ubuntu'
+  execute "apt_update" do
+    command "apt-get update"
+    action :run
+  end
+  include_recipe 'java'
+end
+
 # Install jenkins
-include_recipe 'jenkins::java'
 include_recipe 'jenkins::master'
 
 # Add Jenkins to the Docker group so it create new containers
@@ -115,4 +135,21 @@ ruby_block 'set the security_enabled flag' do
     node.save
   end
   action :nothing
+end
+
+jenkins_password_credentials node['jenkins']['git']['username'] do   
+  id 'c1803003-e1b4-4957-86a1-327a0e9a6369'   
+  description 'GitHub'   
+  password node['jenkins']['git']['password'] 
+end
+
+node['jenkins']['jobs'].each do |job|
+  jobconfig = job + '-config.xml'
+  xml = File.join(Chef::Config[:file_cache_path], jobconfig)
+  template jobconfig do
+    source jobconfig + '.erb'
+  end
+  jenkins_job job do
+    config jobconfig
+  end
 end
