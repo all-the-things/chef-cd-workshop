@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11.1">
-      <projectUrl>https://github.com/alexmanly/sample-cookbook/</projectUrl>
+      <projectUrl><%= node["jenkins"]["git"]["cookbook"]["repo"] %>/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.5">
@@ -14,7 +14,7 @@
       <hudson.plugins.git.UserRemoteConfig>
         <name>origin</name>
         <refspec>+refs/pull/*:refs/remotes/origin/pr/*</refspec>
-        <url>https://github.com/alexmanly/sample-cookbook.git</url>
+        <url><%= node["jenkins"]["git"]["cookbook"]["repo"] %>.git</url>
         <credentialsId>c1803003-e1b4-4957-86a1-327a0e9a6369</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
@@ -25,7 +25,7 @@
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
     <browser class="hudson.plugins.git.browser.GithubWeb">
-      <url>https://github.com/alexmanly/sample-cookbook</url>
+      <url><%= node["jenkins"]["git"]["cookbook"]["repo"] %></url>
     </browser>
     <submoduleCfg class="list"/>
     <extensions>
@@ -44,7 +44,7 @@
       <adminlist>alexmanly</adminlist>
       <allowMembersOfWhitelistedOrgsAsAdmin>false</allowMembersOfWhitelistedOrgsAsAdmin>
       <orgslist></orgslist>
-      <cron>H * * * *</cron>
+      <cron>* * * * *</cron>
       <triggerPhrase></triggerPhrase>
       <onlyTriggerPhrase>false</onlyTriggerPhrase>
       <useGitHubHooks>false</useGitHubHooks>

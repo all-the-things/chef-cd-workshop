@@ -17,7 +17,6 @@ when "centos"
   end 
 end
 
-
 package 'git' do
   action :install
 end
@@ -45,7 +44,6 @@ end
 service 'docker' do
   action [:enable, :start]
 end
-
 
 # Install java
 case node["platform"]
@@ -137,10 +135,10 @@ ruby_block 'set the security_enabled flag' do
   action :nothing
 end
 
-jenkins_password_credentials node['jenkins']['git']['username'] do   
+jenkins_password_credentials node['jenkins']['credentials']['username'] do   
   id 'c1803003-e1b4-4957-86a1-327a0e9a6369'   
   description 'GitHub'   
-  password node['jenkins']['git']['password'] 
+  password node['jenkins']['credentials']['password'] 
 end
 
 node['jenkins']['jobs'].each do |job|
