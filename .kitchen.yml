@@ -6,10 +6,10 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: centos-6.6
+  - name: ubuntu-12.04
     driver_config:
       network:
-        - ["forwarded_port", {guest: 8080, host: 8080}]
+        - ["forwarded_port", {guest: 8080, host: 8082}]
 
         
 suites:
