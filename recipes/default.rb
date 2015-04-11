@@ -14,7 +14,12 @@ when "centos"
     mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
     gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
     action :create
-  end 
+  end
+when 'ubuntu'
+  execute "apt_update" do
+    command "apt-get update"
+    action :run
+  end
 end
 
 package 'git' do
@@ -45,19 +50,8 @@ service 'docker' do
   action [:enable, :start]
 end
 
-# Install java
-case node["platform"]
-when "centos"
-  include_recipe 'jenkins::java'
-when 'ubuntu'
-  execute "apt_update" do
-    command "apt-get update"
-    action :run
-  end
-  include_recipe 'java'
-end
-
 # Install jenkins
+include_recipe 'jenkins::java'
 include_recipe 'jenkins::master'
 
 # Add Jenkins to the Docker group so it create new containers
