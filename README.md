@@ -30,7 +30,7 @@ user.  Default is `'CDWorkshop'`
 a secured Jenkins node.  The related public key must be associated with a
 Jenkins admin user.  
 `node['jenkins']['admin']['public_key']` - The public key associated with the
-admin user
+admin user.
 
 `node['jenkins']['git']['username']` - The git account username.
 `node['jenkins']['git']['oauth_token']` - The git account OAuth token.
