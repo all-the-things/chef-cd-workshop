@@ -41,3 +41,8 @@ default['jenkins']['git']['oauth_token'] = 'ENTER_GIT_OAUTH_TOKEN'
 default['jenkins']['git']['repo']['sample-cookbook'] = 'https://github.com/' + node['jenkins']['git']['username'] + '/sample-cookbook'
 default['jenkins']['git']['repo']['chef-repo'] = 'https://github.com/' + node['jenkins']['git']['username'] + '/chef-repo'
 default['jenkins']['chef']['identity'] = 'chefconf2015-CDWorkshop'
+default['jenkins']['chef']['node_name'] = 'ENTER_CHEF_USERNAME'
+default['jenkins']['chef']['org_name'] = 'ENTER_CHEF_ORGNAME'
+default['jenkins']['chef']['user_pem_key'] = %q(
+ENTER_CHEF_USER_PEM
+)

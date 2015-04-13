@@ -145,3 +145,35 @@ node['jenkins']['jobs'].each do |job|
     config jobconfig
   end
 end
+
+knife_rb = File.join(Chef::Config[:file_cache_path], 'knife.rb')
+template knife_rb do
+  source 'knife.rb.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+end
+
+template node['jenkins']['master']['home'] +'/io.chef.jenkins.ChefIdentityBuildWrapper.xml' do
+  source 'io.chef.jenkins.ChefIdentityBuildWrapper.xml.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+  variables(
+    lazy {{
+      :chef_id => node["jenkins"]["chef"]["identity"],
+      :user_pem_key => Base64.encode64(node["jenkins"]["chef"]["user_pem_key"]),
+      :knife_rb => Base64.encode64(File.read(knife_rb))
+    }}
+  )
+  notifies :restart, 'service[jenkins]'
+end
+
+template node['jenkins']['master']['home'] +'/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml' do
+  source 'org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+  notifies :restart, 'service[jenkins]'
+end
+
