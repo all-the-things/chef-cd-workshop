@@ -7,7 +7,6 @@ provisioner:
 
 platforms:
   - name: centos-6.6
-  - name: ubuntu-12.04
   - name: ubuntu-14.04
     driver_config:
       network:
