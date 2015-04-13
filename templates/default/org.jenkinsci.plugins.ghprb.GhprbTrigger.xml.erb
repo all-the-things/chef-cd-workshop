@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl plugin="ghprb@1.17">
+  <serverAPIUrl>https://api.github.com</serverAPIUrl>
+  <whitelistPhrase>.*add\W+to\W+whitelist.*</whitelistPhrase>
+  <okToTestPhrase>.*ok\W+to\W+test.*</okToTestPhrase>
+  <retestPhrase>.*test\W+this\W+please.*</retestPhrase>
+  <skipBuildPhrase>.*\[skip\W+ci\].*</skipBuildPhrase>
+  <cron>* * * * *</cron>
+  <useComments>false</useComments>
+  <useDetailedComments>false</useDetailedComments>
+  <logExcerptLines>0</logExcerptLines>
+  <unstableAs>FAILURE</unstableAs>
+  <msgSuccess>Test PASSed.</msgSuccess>
+  <msgFailure>Test FAILed.</msgFailure>
+  <commitStatusContext></commitStatusContext>
+  <autoCloseFailedPullRequests>false</autoCloseFailedPullRequests>
+  <displayBuildErrorsOnDownstreamBuilds>false</displayBuildErrorsOnDownstreamBuilds>
+  <username></username>
+  <password></password>
+  <accessToken><%= node['jenkins']['git']['oauth_token'] %></accessToken>
+  <adminlist></adminlist>
+  <publishedURL></publishedURL>
+  <requestForTestingPhrase>Can one of the admins verify this patch?</requestForTestingPhrase>
+  <jobs>
+    <entry>
+      <string>sample-cookbook-verify</string>
+      <concurrent-hash-map/>
+    </entry>
+  </jobs>
+</org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl>
