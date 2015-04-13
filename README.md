@@ -32,15 +32,11 @@ Jenkins admin user.
 `node['jenkins']['admin']['public_key']` - The public key associated with the
 admin user.
 
-`node['jenkins']['git']['username']` - The git account username.
-
-`node['jenkins']['git']['oauth_token']` - The git account OAuth token.
-
-`node['jenkins']['git']['repo']['sample-cookbook']` - The URL to the sample-cookbook  used in the Jenkins verify and accept jobs.
-
-`node['jenkins']['git']['repo']['chef-repo']` - The URL to the chef-repo cookbook used in the Jenkins ship job.
-
-`node['jenkins']['chef']['identity']` - The chef identity name.
+`node['jenkins']['git']['username']` - The git account username.  
+`node['jenkins']['git']['oauth_token']` - The git account OAuth token.  
+`node['jenkins']['git']['repo']['sample-cookbook']` - The URL to the sample-cookbook  used in the Jenkins verify and accept jobs.  
+`node['jenkins']['git']['repo']['chef-repo']` - The URL to the chef-repo cookbook used in the Jenkins ship job.  
+`node['jenkins']['chef']['identity']` - The chef identity name.  
 
 # Platforms
 - CentOS 6.6+
