@@ -4,8 +4,6 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-
-
 # add the EPEL repo so we can install Docker (docker-io)
 case node["platform"]
 when "centos"
@@ -22,10 +20,12 @@ when 'ubuntu'
   end
 end
 
+# Install Git
 package 'git' do
   action :install
 end
 
+# Install ChefDK
 chef_dk 'ChefDK' do 
   action :install
 end
@@ -37,6 +37,7 @@ gem_package 'kitchen-docker' do
   action :install
 end
 
+# Install Docker
 case node["platform"]
 when "centos"
   package 'docker-io' do
@@ -118,7 +119,6 @@ jenkins_script 'add_authentication' do
   action :nothing
 end
 
-
 # Set the security enabled flag and set the run_state to use the configured private key
 ruby_block 'set the security_enabled flag' do
   block do
@@ -143,6 +143,7 @@ node['jenkins']['jobs'].each do |job|
   end
   jenkins_job job do
     config jobconfig
+    notifies :restart, 'service[jenkins]'
   end
 end
 
@@ -152,6 +153,7 @@ template knife_rb do
   owner 'jenkins'
   group 'jenkins'
   mode '0644'
+  notifies :restart, 'service[jenkins]'
 end
 
 template node['jenkins']['master']['home'] +'/io.chef.jenkins.ChefIdentityBuildWrapper.xml' do
@@ -162,12 +164,30 @@ template node['jenkins']['master']['home'] +'/io.chef.jenkins.ChefIdentityBuildW
   variables(
     lazy {{
       :chef_id => node["jenkins"]["chef"]["identity"],
-      :user_pem_key => Base64.encode64(node["jenkins"]["chef"]["user_pem_key"]),
+      :user_pem_key => Base64.encode64(node["jenkins"]["chef"]["user_pem"]),
       :knife_rb => Base64.encode64(File.read(knife_rb))
     }}
   )
   notifies :restart, 'service[jenkins]'
 end
+
+# jenkins_script 'config_chef_plugin' do
+#   command <<-EOH.gsub(/^ {4}/, '')
+#     import jenkins.model.*
+#     import org.jenkinsci.plugins.*
+#     import io.chef.jenkins.*
+
+#     def desc = Jenkins.getInstance().getDescriptor("io.chef.jenkins.ChefIdentityBuildWrapper")
+#     def chefIdentities = desc.getChefIdentities()
+#     def chefIdentity = null
+#     if (chefIdentities == null) {
+#       chefIdentities = new ArrayList()
+#     }
+#     chefIdentities.add(new ChefIdentity('#{node["jenkins"]["chef"]["identity"]}', 'B', 'C'))
+#   desc.setChefIdentities(chefIdentities)
+#   desc.save()
+#   EOH
+# end
 
 template node['jenkins']['master']['home'] +'/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml' do
   source 'org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.erb'
@@ -176,4 +196,3 @@ template node['jenkins']['master']['home'] +'/org.jenkinsci.plugins.ghprb.GhprbT
   mode '0644'
   notifies :restart, 'service[jenkins]'
 end
-
