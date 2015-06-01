@@ -7,11 +7,9 @@ provisioner:
 
 platforms:
   - name: centos-6.6
-  - name: ubuntu-14.04
     driver_config:
       network:
-        - ["forwarded_port", {guest: 8080, host: 8082}]
-
+        - ["private_network", {ip: "192.168.56.42"}]
         
 suites:
   - name: default
