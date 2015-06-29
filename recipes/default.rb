@@ -14,6 +14,10 @@ when "centos"
     action :create
   end
 when 'ubuntu'
+  packagecloud_repo 'chef/stable'
+
+  package 'delivery-cli'
+  
   execute "apt_update" do
     command "apt-get update"
     action :run
