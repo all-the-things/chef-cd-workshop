@@ -48,7 +48,9 @@ when "centos"
     action :install
   end
 when 'ubuntu'
-  include_recipe 'docker::package'
+  docker_service 'default' do
+    action [:create, :start]
+  end
 end
 
 service 'docker' do
