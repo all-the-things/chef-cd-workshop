@@ -4,20 +4,32 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-
-
 # add the EPEL repo so we can install Docker (docker-io)
-yum_repository 'epel' do
-  description 'Extra Packages for Enterprise Linux'
-  mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
-  gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
-  action :create
+case node["platform"]
+when "centos"
+  yum_repository 'epel' do
+    description 'Extra Packages for Enterprise Linux'
+    mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
+    gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+    action :create
+  end
+when 'ubuntu'
+  packagecloud_repo 'chef/stable'
+
+  package 'delivery-cli'
+  
+  execute "apt_update" do
+    command "apt-get update"
+    action :run
+  end
 end
 
+# Install Git
 package 'git' do
   action :install
 end
 
+# Install ChefDK
 chef_dk 'ChefDK' do 
   action :install
 end
@@ -29,9 +41,16 @@ gem_package 'kitchen-docker' do
   action :install
 end
 
-# Install docker
-package 'docker-io' do
-  action :install
+# Install Docker
+case node["platform"]
+when "centos"
+  package 'docker-io' do
+    action :install
+  end
+when 'ubuntu'
+  docker_service 'default' do
+    action [:create, :start]
+  end
 end
 
 service 'docker' do
@@ -106,7 +125,6 @@ jenkins_script 'add_authentication' do
   action :nothing
 end
 
-
 # Set the security enabled flag and set the run_state to use the configured private key
 ruby_block 'set the security_enabled flag' do
   block do
@@ -115,4 +133,72 @@ ruby_block 'set the security_enabled flag' do
     node.save
   end
   action :nothing
+end
+
+jenkins_password_credentials node['jenkins']['git']['username'] do   
+  id 'c1803003-e1b4-4957-86a1-327a0e9a6369'   
+  description 'GitHub'   
+  password node['jenkins']['git']['oauth_token'] 
+end
+
+node['jenkins']['jobs'].each do |job|
+  jobconfig = job + '-config.xml'
+  xml = File.join(Chef::Config[:file_cache_path], jobconfig)
+  template jobconfig do
+    source jobconfig + '.erb'
+  end
+  jenkins_job job do
+    config jobconfig
+    notifies :restart, 'service[jenkins]'
+  end
+end
+
+knife_rb = File.join(Chef::Config[:file_cache_path], 'knife.rb')
+template knife_rb do
+  source 'knife.rb.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+  notifies :restart, 'service[jenkins]'
+end
+
+template node['jenkins']['master']['home'] +'/io.chef.jenkins.ChefIdentityBuildWrapper.xml' do
+  source 'io.chef.jenkins.ChefIdentityBuildWrapper.xml.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+  variables(
+    lazy {{
+      :chef_id => node["jenkins"]["chef"]["identity"],
+      :user_pem_key => Base64.encode64(node["jenkins"]["chef"]["user_pem"]),
+      :knife_rb => Base64.encode64(File.read(knife_rb))
+    }}
+  )
+  notifies :restart, 'service[jenkins]'
+end
+
+# jenkins_script 'config_chef_plugin' do
+#   command <<-EOH.gsub(/^ {4}/, '')
+#     import jenkins.model.*
+#     import org.jenkinsci.plugins.*
+#     import io.chef.jenkins.*
+
+#     def desc = Jenkins.getInstance().getDescriptor("io.chef.jenkins.ChefIdentityBuildWrapper")
+#     def chefIdentities = desc.getChefIdentities()
+#     def chefIdentity = null
+#     if (chefIdentities == null) {
+#       chefIdentities = new ArrayList()
+#     }
+#     chefIdentities.add(new ChefIdentity('#{node["jenkins"]["chef"]["identity"]}', 'B', 'C'))
+#   desc.setChefIdentities(chefIdentities)
+#   desc.save()
+#   EOH
+# end
+
+template node['jenkins']['master']['home'] +'/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml' do
+  source 'org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.erb'
+  owner 'jenkins'
+  group 'jenkins'
+  mode '0644'
+  notifies :restart, 'service[jenkins]'
 end

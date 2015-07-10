@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.11.1">
+      <projectUrl><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %>/</projectUrl>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BUMP_LEVEL</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>patch</string>
+              <string>minor</string>
+              <string>major</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.5">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>origin</name>
+        <url><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %>.git</url>
+        <credentialsId>c1803003-e1b4-4957-86a1-327a0e9a6369</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <browser class="hudson.plugins.git.browser.GithubWeb">
+      <url><%= node["jenkins"]["git"]["repo"]["sample-cookbook"] %></url>
+    </browser>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+        <relativeTargetDir>cookbooks/${JOB_NAME}</relativeTargetDir>
+      </hudson.plugins.git.extensions.impl.RelativeTargetDirectory>
+    </extensions>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>knife cookbook test -o cookbooks/$JOB_NAME -a</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>foodcritic -f any cookbooks/${JOB_NAME}</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>rubocop cookbooks/${JOB_NAME}</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>rspec -fd --color --default-path cookbooks/${JOB_NAME}/spec</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>cd cookbooks/${JOB_NAME}
+kitchen test</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>knife spork bump sample-cookbook $BUMP_LEVEL
+COOKBOOK_VERSION=v`sed -n &quot;s/^ *version *[\&apos;\&quot;]\(.*\)[\&apos;\&quot;]/\1/p&quot; cookbooks/$JOB_NAME/metadata.rb`
+echo COOKBOOK_VERSION=$COOKBOOK_VERSION &gt;&gt; build.properties
+ 
+cd cookbooks/$JOB_NAME
+if [ -b &quot;Berksfile.lock&quot; ]
+then
+  berks update sample-cookbook
+else
+  berks install
+fi
+berks upload sample-cookbook
+ 
+git add metadata.rb
+git commit -m &quot;Bump version to $COOKBOOK_VERSION&quot;</command>
+    </hudson.tasks.Shell>
+    <EnvInjectBuilder plugin="envinject@1.91.1">
+      <info>
+        <propertiesFilePath>build.properties</propertiesFilePath>
+      </info>
+    </EnvInjectBuilder>
+  </builders>
+  <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@2.3.5">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <tagsToPush>
+        <hudson.plugins.git.GitPublisher_-TagToPush>
+          <targetRepoName>origin</targetRepoName>
+          <tagName>$COOKBOOK_VERSION</tagName>
+          <tagMessage></tagMessage>
+          <createTag>true</createTag>
+          <updateTag>false</updateTag>
+        </hudson.plugins.git.GitPublisher_-TagToPush>
+      </tagsToPush>
+      <branchesToPush>
+        <hudson.plugins.git.GitPublisher_-BranchToPush>
+          <targetRepoName>origin</targetRepoName>
+          <branchName>master</branchName>
+        </hudson.plugins.git.GitPublisher_-BranchToPush>
+      </branchesToPush>
+    </hudson.plugins.git.GitPublisher>
+  </publishers>
+  <buildWrappers>
+    <io.chef.jenkins.ChefIdentityBuildWrapper plugin="chef-identity@0.1.2">
+      <jobIdentity><%= node["jenkins"]["chef"]["identity"] %></jobIdentity>
+    </io.chef.jenkins.ChefIdentityBuildWrapper>
+    <hudson.plugins.ansicolor.AnsiColorBuildWrapper plugin="ansicolor@0.4.1">
+      <colorMapName>xterm</colorMapName>
+    </hudson.plugins.ansicolor.AnsiColorBuildWrapper>
+    <EnvInjectBuildWrapper plugin="envinject@1.91.1">
+      <info>
+        <propertiesContent>KITCHEN_YAML=.kitchen-docker.yml
+PATH=$PATH:/opt/chefdk/embedded/bin</propertiesContent>
+        <loadFilesFromMaster>false</loadFilesFromMaster>
+      </info>
+    </EnvInjectBuildWrapper>
+  </buildWrappers>
+</project>
