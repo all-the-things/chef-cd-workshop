@@ -7,5 +7,7 @@ long_description 'Installs/Configures chef-cd-workshop'
 version          '0.1.0'
 
 depends 'yum'
+depends 'java'
 depends 'jenkins'
 depends 'chef-dk'
+depends 'git'
