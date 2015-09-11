@@ -14,9 +14,8 @@ yum_repository 'epel' do
   action :create
 end
 
-package 'git' do
-  action :install
-end
+
+include_recipe 'git::source'
 
 chef_dk 'ChefDK' do 
   action :install
@@ -39,7 +38,12 @@ service 'docker' do
 end
 
 # Install jenkins
-include_recipe 'jenkins::java'
+node.default['java']['jdk_version'] = '7'
+node.default['java']['install_flavor'] = 'oracle'
+node.default['java']['oracle']['accept_oracle_download_terms'] = true
+
+#include_recipe 'jenkins::java'
+include_recipe 'java'
 include_recipe 'jenkins::master'
 
 # Add Jenkins to the Docker group so it create new containers
